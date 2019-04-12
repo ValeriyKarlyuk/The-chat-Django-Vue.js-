@@ -1,27 +1,45 @@
 <!DOCTYPE html>
 <!-- chat/templates/chat/index.html -->
 <html>
+
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title>Chat Rooms</title>
 </head>
+
 <body>
-    What chat room would you like to enter?<br/>
-    <input id="room-name-input" type="text" size="100"/><br/>
-    <input id="room-name-submit" type="button" value="Enter"/>
+    <div id="room-name">
+        What chat room would you like to enter?<br /><br />
+        <input  @keyup.13 = "connectToRoom" v-focus id="room-name-input" type="text" size="35" ref = "roomName"/><br /><br />
+        <input  v-on:click = "connectToRoom" id="room-name-submit" type="button" value="Enter" />
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
     <script>
-        document.querySelector('#room-name-input').focus();
-        document.querySelector('#room-name-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#room-name-submit').click();
-            }
-        };
 
-        document.querySelector('#room-name-submit').onclick = function(e) {
-            var roomName = document.querySelector('#room-name-input').value;
-            window.location.pathname = '/chat/' + roomName + '/';
-        };
+        Vue.directive('focus', {
+            inserted: el => el.focus()
+        });
+
+        new Vue({
+            el: '#room-name',
+            data: {
+                chatRoomName: ''
+            },
+            methods: {
+                connectToRoom() {
+                    this.chatRoomName = this.$refs.roomName.value;
+                    if(!this.chatRoomName) {
+                        alert('To connect to any chat rooms need to fill the input field!')
+                    }else{
+                    alert(`You have been connected to the ${this.chatRoomName} room! Have a nice conversation!`);
+                    window.location.pathname = '/chat/' + this.chatRoomName + '/';
+                    alert(window.location.pathname);
+                    }
+                }
+            }
+        });
     </script>
 </body>
+
 </html>
